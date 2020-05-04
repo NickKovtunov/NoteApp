@@ -11,7 +11,7 @@
           <message v-if="message" :message="message"/>
 
           <!-- new note -->
-          <newNote :note="note" @addNote="addNote"/>
+          <newNote :note="note" :priorities="priorities" @addNote="addNote"/>
 
           <div class="note-header" style="margin: 36px 0;">
             <!-- title -->
@@ -58,23 +58,38 @@ export default {
       grid: true,
       note: {
         title: '',
-        descr: ''
+        descr: '',
+        priority: 'low'
       },
+      priorities:[
+        {
+          title: 'low'
+        },
+        {
+          title: 'medium'
+        },
+        {
+          title: 'high'
+        }
+      ],
       notes: [
         {
           title: 'First Note',
           descr: 'Description for first note',
-          date: new Date(Date.now()).toLocaleString()
+          date: new Date(Date.now()).toLocaleString(),
+          priority: 'low'
         },
         {
           title: 'Second Note',
           descr: 'Description for second note',
-          date: new Date(Date.now()).toLocaleString()
+          date: new Date(Date.now()).toLocaleString(),
+          priority: 'medium'
         },
         {
           title: 'Third Note',
           descr: 'Description for third note',
-          date: new Date(Date.now()).toLocaleString()
+          date: new Date(Date.now()).toLocaleString(),
+          priority: 'high'
         }
       ]
     }
@@ -99,7 +114,7 @@ export default {
   methods: {
     addNote () {
       // console.log(this.note)
-      let {title, descr} = this.note
+      let {title, descr, priority} = this.note
 
       if (title === '') {
         this.message = 'title can`t be blank!'
@@ -109,11 +124,13 @@ export default {
       this.notes.push({
         title,
         descr,
+        priority,
         date: new Date(Date.now()).toLocaleString()
       })
       this.message = null
       this.note.title = ''
       this.note.descr = ''
+      this.note.priority = 'low'
     },
     removeNote (index) {
       this.notes.splice(index, 1)

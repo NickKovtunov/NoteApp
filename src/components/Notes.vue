@@ -1,7 +1,7 @@
 <template>
   <!-- note list -->
   <div class="notes">
-    <div class="note" :class="{ full: !grid }" v-for="(note, index) in notes" :key="index">
+    <div class="note" v-for="(note, index) in notes" :key="index" :class="{ full: !grid, lowPriority : note.priority == 'low', mediumPriority : note.priority == 'medium', highPriority : note.priority == 'high' }">
       <div class="note-header" :class="{ full: !grid }" >
         <p>{{ note.title }}</p>
         <p style="cursor: pointer;" @click="removeNote(index)">x</p>

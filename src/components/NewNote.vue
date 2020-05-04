@@ -3,6 +3,10 @@
   <div class="new-note">
     <label>Title</label>
     <input v-model="note.title" type="text">
+    <label>Priority</label>
+    <select v-model="note.priority">
+        <option v-for="(priority, index) in priorities" :key="index">{{priority.title}}</option>
+    </select>
     <label>Description</label>
     <textarea v-model="note.descr"></textarea>
     <button class="btn btnPrimary" @click="addNote">New note</button>
@@ -13,6 +17,10 @@
 export default {
   props: {
     note: {
+      type: Object,
+      required: true
+    },
+    priorities: {
       type: Object,
       required: true
     }

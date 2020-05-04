@@ -16,3 +16,22 @@ textarea {
 input, textarea {
   width: 100%;
 }
+
+select{
+  padding: 16px 26px;
+  margin-bottom: 30px;
+  border-radius: 20px;
+  width: 100%;
+}
+
+.lowPriority{
+  border-left: 10px solid green,
+}
+
+.mediumPriority{
+  border-left: 10px solid yellow,
+}
+
+.highPriority{
+  border-left: 10px solid red,
+}
