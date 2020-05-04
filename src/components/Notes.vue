@@ -9,6 +9,7 @@
       <div class="note-body">
         <p>{{ note.descr }}</p>
         <span>{{ note.date }}</span>
+        <span style="cursor: pointer; float: right;" @click="openEditWindow(index)">Редактировать</span>
       </div>
     </div>
   </div>
@@ -27,10 +28,14 @@ export default {
     }
   },
   methods: {
-    removeNote (index) {
+    removeNote(index) {
       console.log(`Note id - ${index} removed`)
       this.$emit('remove', index)
-    }
+    },
+
+    openEditWindow(index) {
+      this.$emit('openEditWindow', index)
+    },
   }
 }
 </script>

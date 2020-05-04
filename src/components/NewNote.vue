@@ -21,7 +21,7 @@ export default {
       required: true
     },
     priorities: {
-      type: Object,
+      type: Array,
       required: true
     }
   },

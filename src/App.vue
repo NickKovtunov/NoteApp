@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
     <div class="wrapper-content">
-
       <section>
         <div class="container">
           <div class="note-header" style="margin: 36px 0; justify-content: center;">
@@ -31,9 +30,10 @@
           </div>
 
           <!-- note list -->
-          <notes :notes="notesFilter" :grid="grid" @remove="removeNote" />
-
+          <notes :notes="notesFilter" :grid="grid" @remove="removeNote" @openEditWindow="openEditWindow" />
         </div>
+
+        <editNote :editedNote="editedNote" :priorities="priorities" @closeEditWindow="closeEditWindow" :isOpenEditWindow="isOpenEditWindow" @editNote="editNote"/>
       </section>
 
     </div>
@@ -44,11 +44,12 @@
 import message from '@/components/Message.vue'
 import notes from '@/components/Notes.vue'
 import newNote from '@/components/NewNote.vue'
+import editNote from '@/components/EditNote.vue'
 import search from '@/components/Search.vue'
 
 export default {
   components: {
-    message, notes, newNote, search
+    message, notes, newNote, editNote, search
   },
   data () {
     return {
@@ -61,6 +62,12 @@ export default {
         descr: '',
         priority: 'low'
       },
+      editedNote: {
+        index: null,
+        title: '',
+        descr: '',
+        priority: ''
+      },
       priorities:[
         {
           title: 'low'
@@ -72,6 +79,7 @@ export default {
           title: 'high'
         }
       ],
+      isOpenEditWindow: false,
       notes: [
         {
           title: 'First Note',
@@ -132,8 +140,33 @@ export default {
       this.note.descr = ''
       this.note.priority = 'low'
     },
+    editNote (index) {
+      this.notes[index].title = this.editedNote.title
+      this.notes[index].descr = this.editedNote.descr
+      this.notes[index].priority = this.editedNote.priority
+      this.notes[index].date = new Date(Date.now()).toLocaleString()
+      this.isOpenEditWindow = false
+
+      this.editedNote.index = null
+      this.editedNote.title = ''
+      this.editedNote.descr = ''
+      this.editedNote.priority = ''
+    },
     removeNote (index) {
       this.notes.splice(index, 1)
+    },
+    openEditWindow (index) {
+      this.editedNote.index = index
+      this.editedNote.title = this.notes[index].title
+      this.editedNote.descr = this.notes[index].descr
+      this.editedNote.priority = this.notes[index].priority
+      this.isOpenEditWindow = true
+    },
+    closeEditWindow () {
+      this.isOpenEditWindow = false
+      this.editedNote.title = ""
+      this.editedNote.descr = ""
+      this.editedNote.priority = ""
     }
   }
 }
