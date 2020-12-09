@@ -68,43 +68,14 @@ export default {
         descr: '',
         priority: ''
       },
-      priorities:[
-        {
-          title: 'low'
-        },
-        {
-          title: 'medium'
-        },
-        {
-          title: 'high'
-        }
-      ],
+      priorities: null,
       isOpenEditWindow: false,
-      notes: [
-        {
-          title: 'First Note',
-          descr: 'Description for first note',
-          date: new Date(Date.now()).toLocaleString(),
-          priority: 'low'
-        },
-        {
-          title: 'Second Note',
-          descr: 'Description for second note',
-          date: new Date(Date.now()).toLocaleString(),
-          priority: 'medium'
-        },
-        {
-          title: 'Third Note',
-          descr: 'Description for third note',
-          date: new Date(Date.now()).toLocaleString(),
-          priority: 'high'
-        }
-      ]
+      notes: null
     }
   },
   computed: {
     notesFilter () {
-      let array = this.notes,
+      let array = this.$store.getters.getNotesList,
           search = this.search
       if (!search) return array
       // Small
@@ -129,22 +100,26 @@ export default {
         return false
       }
 
-      this.notes.push({
+      this.$store.dispatch('addNote', { 
         title,
         descr,
         priority,
         date: new Date(Date.now()).toLocaleString()
-      })
+       })
       this.message = null
       this.note.title = ''
       this.note.descr = ''
       this.note.priority = 'low'
     },
     editNote (index) {
-      this.notes[index].title = this.editedNote.title
-      this.notes[index].descr = this.editedNote.descr
-      this.notes[index].priority = this.editedNote.priority
-      this.notes[index].date = new Date(Date.now()).toLocaleString()
+      let note = {
+        index: index,
+        title: this.editedNote.title,
+        descr: this.editedNote.descr,
+        priority: this.editedNote.priority,
+        date: new Date(Date.now()).toLocaleString()
+      }
+      this.$store.dispatch('editNote', note)
       this.isOpenEditWindow = false
 
       this.editedNote.index = null
@@ -153,13 +128,14 @@ export default {
       this.editedNote.priority = ''
     },
     removeNote (index) {
-      this.notes.splice(index, 1)
+      this.$store.dispatch('removeNote', index)
     },
     openEditWindow (index) {
+      let note = this.$store.getters.getNote(index)
       this.editedNote.index = index
-      this.editedNote.title = this.notes[index].title
-      this.editedNote.descr = this.notes[index].descr
-      this.editedNote.priority = this.notes[index].priority
+      this.editedNote.title = note.title
+      this.editedNote.descr = note.descr
+      this.editedNote.priority = note.priority
       this.isOpenEditWindow = true
     },
     closeEditWindow () {
@@ -168,7 +144,11 @@ export default {
       this.editedNote.descr = ""
       this.editedNote.priority = ""
     }
-  }
+  },
+  created () {
+    this.notes = this.$store.getters.getNotesList,
+    this.priorities = this.$store.getters.getPrioritiesList
+  },
 }
 </script>
 
